@@ -1,0 +1,13 @@
+plugins:
+- name: Camera
+  onLoad: false
+  pluginClass: inswave.wmatrix.base.plugin.camera.CameraLauncher
+- name: NetworkStatus
+  onLoad: true
+  pluginClass: inswave.wmatrix.base.plugin.networkinformation.NetworkManager
+- name: Device
+  onLoad: true
+  pluginClass: inswave.wmatrix.base.plugin.device.DevicePlugin
+- name: WMatrixProviderPlugin
+  onLoad: false
+  pluginClass: inswave.wmatrix.base.plugin.provider.WMatrixProviderPlugin

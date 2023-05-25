@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin compile = "true" id="wmatrix-plugin-contents" version="1.1.2" type="basic">
+    <name>Contents</name>
+    <description>WMatrix Contents Plugin</description>
+
+    <!-- android -->
+    <platform name="android">
+        <js-module src="www/contents.js" name="contents">
+            <clobbers target="wmatrix.plugin.contents" />
+        </js-module>
+
+        <config-file target="PluginConfig.yaml">
+            <feature name="ContentsPlugin">
+                <param name="android-package" value="wmatrix.plugin.contents.ContentsPlugin"/>
+            </feature>
+        </config-file>
+
+
+        <lib-file src="src/android/lib/wmatrix-plugin-contents-1.1.2.jar"/>
+
+        <resource-file src="src/android/res/drawable-hdpi" target="res/drawable-hdpi" />
+        <resource-file src="src/android/res/drawable-mdpi" target="res/drawable-mdpi" />
+        <resource-file src="src/android/res/drawable-xhdpi" target="res/drawable-xhdpi" />
+        <resource-file src="src/android/res/drawable-xxhdpi" target="res/drawable-xxhdpi" />
+        <resource-file src="src/android/res/drawable-xxxhdpi" target="res/drawable-xxxhdpi" />
+
+    </platform>
+</plugin>

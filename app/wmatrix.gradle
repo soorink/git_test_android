@@ -1,0 +1,82 @@
+/*
+ * Copyright (C) Inswave Systems, Inc - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Inswave Systems <webmaster@inswave.com>, 2022
+ */
+
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        flatDir{
+            dirs("plugins/lib")
+        }
+    }
+
+    dependencies {
+        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.18-android'
+        classpath group: 'wmatrix', name: 'wmatrix-gradle-plugin', version: '2.0.4'
+        classpath group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '5.9.0.202009080501-r'
+        classpath group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
+    }
+}
+
+apply plugin: WMatrixGradlePlugin
+
+/*
+Asset의 파일들을 zip으로 묶고 나서 빌드 시작
+Resource zip 파일의 checksum값을 추출 후 Asset에 포함
+*/
+task AssetZip(type: Zip) {
+    from fileTree(dir: "src/main/assets/www/")
+    archiveName "www_content.zip"
+    destinationDir(file("src/main/assets/"))
+
+    def destinationPath = "${destinationDirectory.get()}/${archiveFileName.get()}"
+
+    doLast {
+        println("assetzip destinationPath = " + destinationPath)
+        ant.checksum file: destinationPath
+    }
+}
+
+/* Resource zip 파일의 checksum값을 추출 후 Asset에 포함 */
+task ResourceHash(dependsOn: "AssetZip"){
+    doLast{
+        FileTree tree = fileTree("./src/main/assets/wmatrixprovider/resource/")
+        tree.include("**/*.zip")
+        tree.forEach{File file ->
+            ant.checksum file: file.path
+        }
+    }
+}
+
+task releaseAlpha() {
+    doLast{
+        exec{
+            workingDir "../"
+            commandLine("fastlane", "alpha")
+        }
+    }
+}
+
+task releaseBeta() {
+    doLast{
+        exec{
+            workingDir "../"
+            commandLine("fastlane", "beta")
+        }
+    }
+}
+
+task releaseProduction() {
+    doLast{
+        exec{
+            workingDir "../"
+            commandLine("fastlane", "production")
+        }
+    }
+}
+
+preBuild.dependsOn ResourceHash

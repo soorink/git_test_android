@@ -1,0 +1,73 @@
+wmatrix:
+
+  # 활성화 된 profile. (active 에 설정 한 profile 기준으로 앱이 빌드된다.)
+  active: develop
+
+  # Profile 목록.
+  profiles:
+
+    # 기본 Product Profile
+    product:
+
+      # Application Id (build.gradle 내 applicationId 값에 세팅된다.)
+      applicationId: inswave.wmatrix.template
+
+      # Application Name. (앱 설치 시 보여지는 이름 - build.gradle 내 applicationName 값에 세팅된다.)
+      appName: WMatrix (Product)
+
+      # App Version (build.gradle 내 versionCode 에 세팅된다.)
+      appVersion: 0.0.1
+
+      # App Version Code (build.gradle 내 versionCode 에 세팅된다.)
+      appVersionCode: 1
+
+      # 최소 지원 OS VersionCode (build.gradle 내 minSdkVersion 에 세팅된다.)
+      minSdkVersion: 21
+
+      # 별도로 설정값 추가한 케이스. (예시)
+      useServerSelectScreen: false
+
+      # 각 용도에 따른 Server 정보.
+      server:
+
+        # Server 1 정보 (필수) - Default Release
+        - name: W-Matrix Sample
+          appId: inswave.wmatrix.testcase
+          url: http://whybrid.inswave.kr:8088
+
+        # Server 2 정보 (선택)
+        - name: W-Matrix Release
+          url: http://192.168.151.113:8080
+
+    # develop profile (sample)
+    develop:
+      applicationId: inswave.wmatrix.template.dev
+      appName: WMatrix (Dev)
+      appVersion: 0.0.1
+      appVersionCode: 1
+      minSdkVersion: 21
+      useServerSelectScreen: true
+      server:
+        - name: W-Matrix Sample
+          appId: inswave.wmatrix.testcase
+          url: http://whybrid.inswave.kr:8088
+        - name: W-Matrix Dev
+          url: http://192.168.151.113:8080
+        - name: WMRM
+          appId: inswave.wmatrix.mrm
+          url: http://192.168.151.51:9080/
+
+    # test profile (sample)
+    tst:
+      applicationId: inswave.wmatrix.template.tst
+      appName: WMatrix (Test)
+      appVersion: 0.0.1
+      appVersionCode: 1
+      minSdkVersion: 21
+      useServerSelectScreen: true
+      server:
+        - name: W-Matrix Sample
+          appId: inswave.wmatrix.testcase
+          url: http://whybrid.inswave.kr:8088
+        - name: W-Matrix Test
+          url: http://192.168.151.113:8080

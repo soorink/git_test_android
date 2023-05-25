@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) Inswave Systems, Inc - All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  ~ Written by Inswave Systems <webmaster@inswave.com>, 2022
+  -->
+
+<plugin compile="true" id="wmatrix-plugin-app" version="1.1.5" type="basic">
+
+    <name>App</name>
+    <description>WMatrix App Plugin</description>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+            <uses-permission android:name="android.permission.RECORD_AUDIO" />
+        </config-file>
+
+        <js-module src="www/app.js" name="app">
+            <clobbers target="wmatrix.plugin.app" />
+        </js-module>
+
+        <config-file target="PluginConfig.yaml">
+            <feature name="AppPlugin">
+                <param name="android-package" value="wmatrix.plugin.app.AppPlugin"/>
+            </feature>
+        </config-file>
+
+        <lib-file src="libs/wmatrix-plugin-app-1.1.5.jar" />
+
+    </platform>
+
+
+</plugin>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin compile = "true" id="wmatrix-plugin-websquare" version="1.1.0" type="basic">
+    <name>WebSquare</name>
+    <description>WMatrix WebSquare Plugin</description>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+        </config-file>
+
+        <js-module src="www/websquare_plugin.js" name="websquare">
+            <clobbers target="wmatrix.plugin.websquare" />
+        </js-module>
+
+        <config-file target="PluginConfig.yaml">
+            <feature name="WebSquarePlugin">
+                <param name="android-package" value="wmatrix.plugin.websquare.WebSquarePlugin"/>
+            </feature>
+        </config-file>
+
+        <resource-file src="src/android/res/websquare_strings.xml" target="/res/values/websquare_strings.xml" />
+
+        <lib-file src="src/android/lib/wmatrix-plugin-websquare-1.1.0.jar"/>
+
+    </platform>
+</plugin>

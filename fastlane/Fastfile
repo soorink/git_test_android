@@ -1,0 +1,43 @@
+default_platform(:android)
+platform :android do
+desc "Runs all the tests"
+lane :test do
+gradle(task: "test")
+end
+desc "Submit a new Alpha Build to Alpha Test"
+lane :alpha do
+# gradle(
+#     task: "clean assemble",
+#     build_type: "Release"
+# )
+upload_to_play_store(
+track: "alpha",
+aab: ENV["BUILD_APP_FILE_PATH"],
+version_code: ENV["BUILD_APP_VERSION_CODE"]
+)
+end
+desc "Submit a new Beta Build to Crashlytics Beta"
+lane :beta do
+# gradle(
+#     task: "clean assemble",
+#     build_type: "Release"
+# )
+upload_to_play_store(track: "beta",
+aab: ENV["BUILD_APP_FILE_PATH"],
+version_code: ENV["BUILD_APP_VERSION_CODE"]
+)
+end
+desc "Deploy a new version to the Google Play"
+lane :deploy do
+#gradle(task: "clean assembleRelease")
+upload_to_play_store(
+track: "production",
+aab: ENV["BUILD_APP_FILE_PATH"],
+version_code: ENV["BUILD_APP_VERSION_CODE"],
+skip_upload_metadata: true,
+skip_upload_changelogs: true,
+skip_upload_images: true,
+skip_upload_screenshots: true
+)
+end
+end

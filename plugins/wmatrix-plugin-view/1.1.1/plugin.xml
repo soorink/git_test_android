@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin compile = "true" id="wmatrix-plugin-view" version="1.1.1" type="basic">
+    <name>View</name>
+    <description>WMatrix View Plugin</description>
+
+    <!-- android -->
+    <platform name="android">
+        <js-module src="www/view.js" name="view">
+            <clobbers target="wmatrix.plugin.view" />
+        </js-module>
+
+        <config-file target="PluginConfig.yaml">
+            <feature name="ViewPlugin">
+                <param name="android-package" value="wmatrix.plugin.view.ViewPlugin"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <receiver android:name="wmatrix.plugin.view.receiver.ViewPluginReceiver"
+                android:exported="false"
+                android:enabled="true">
+
+                <intent-filter>
+                    <action android:name="wmatrix.plugin.action.notification" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+
+            </receiver>
+
+        </config-file>
+
+        <resource-file src="src/android/res/view_strings.xml" target="/res/values/view_strings.xml" />
+
+        <lib-file src="src/android/lib/wmatrix-plugin-view-1.1.1.jar"/>
+
+    </platform>
+</plugin>

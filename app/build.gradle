@@ -1,0 +1,183 @@
+/*
+ * Copyright (C) Inswave Systems, Inc - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Inswave Systems <webmaster@inswave.com>, 2022
+ */
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+
+/**
+ * [필수] wmatrix.gradle 을 적용.
+ */
+apply from: 'wmatrix.gradle'
+
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+/**
+ * Runtime 시에 WMatrixConfig.yaml 에 active 된 profile 정보로 동작한다.
+ */
+println("activeProfile = ${wmatrix.active}")
+
+android {
+    compileSdkVersion 33
+    buildToolsVersion "33.0.0"
+    defaultConfig {
+        applicationId wmatrix.activeProfile.applicationId
+        versionCode wmatrix.activeProfile.appVersionCode
+        versionName wmatrix.activeProfile.appVersion
+        multiDexEnabled true
+        minSdkVersion wmatrix.activeProfile.minSdkVersion
+        targetSdkVersion 33
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+
+        archivesBaseName = "${wmatrix.applicationName}_v${wmatrix.activeProfile.appVersion}_${new Date().format("yyyyMMddHHmmss")}"
+    }
+
+
+    lintOptions {
+        disable "MissingTranslation"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties["keyAlias"]
+            keyPassword keystoreProperties["keyPassword"]
+            storeFile file(keystoreProperties["storeFile"])
+            storePassword keystoreProperties["storePassword"]
+        }
+    }
+
+    /**
+     * WMatrixConfig.yaml 에서
+     * profile 별 설정값을 사용하려는 경우 productFlavors 를 사용하도록 한다.
+     *
+     * 아래는 샘플) TemplateActivity.kt 기준 아래 값으로 사용할 수 있다. (WMatrixSdk.init() 전에 사용 가능)
+     * - BuildConfig.BASE_URL
+     * - BuildConfig.SOLUTIONS_KEY
+     * - BuildConfig.TEST_NAME
+     */
+//    flavorDimensions "mode"
+//    productFlavors {
+//        product {
+//            buildConfigField "String", "BASE_URL", "\"https://www.product.com\""
+//            buildConfigField "String", "SOLUTIONS_KEY", "\"AAAAAAAAAAAAAA\""
+//            buildConfigField "String", "TEST_NAME", "\"1q1q1q1q1q1q1q1q1q1q1q1q\""
+//        }
+//
+//        develop {
+//            buildConfigField "String", "BASE_URL", "\"https://www.develop.com\""
+//            buildConfigField "String", "SOLUTIONS_KEY", "\"BBBBBBBBBBBBBB\""
+//            buildConfigField "String", "TEST_NAME", "\"2w2w2w2w2w2w2w2w2w2w2\""
+//        }
+//
+//        tst {
+//            buildConfigField "String", "BASE_URL", "\"https://www.test.com\""
+//            buildConfigField "String", "SOLUTIONS_KEY", "\"CCCCCCCCCCCCCCC\""
+//            buildConfigField "String", "TEST_NAME", "\"3e3e3e3e3e3e3e3e3e3e3e3e\""
+//        }
+//    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android.txt")
+        }
+    }
+
+    buildTypes.each {
+        it.resValue "string", "WMatrixConfig_AppName", wmatrix.activeProfile.appName
+        it.resValue "string", "WMatrixConfig_Server", "${wmatrix.matrixConfigYamlFile.bytes}"
+        it.resValue "string", "WMatrixConfig_Active", wmatrix.active
+        it.resValue "string", "plugin_config", "${wmatrix.pluginConfigYamlFile.bytes}"
+    }
+
+    /* Asset에서 www디렉토리 제외 (압축 Task에서 압축 함) */
+    aaptOptions {
+        def defaultIgnorePattern = "www:.DS_Store"
+        ignoreAssetsPattern defaultIgnorePattern
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+    
+    implementation fileTree(dir: "libs", include: "*.aar")
+    implementation fileTree(dir: "libs", include: "*.jar")
+
+    //START OF DEPENDENCIES (DO NOT REMOVE OR MODIFY THIS LINE.)
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+    implementation "androidx.concurrent:concurrent-futures:1.1.0"
+
+    implementation "androidx.activity:activity-ktx:1.6.1"
+    implementation "androidx.appcompat:appcompat:1.6.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.exifinterface:exifinterface:1.3.5"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-common:2.5.1"
+    implementation "androidx.media:media:1.6.0"
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation "androidx.room:room-runtime:2.5.0"
+    kapt "androidx.room:room-compiler:2.5.0"
+    implementation "androidx.room:room-ktx:2.5.0"
+    implementation "androidx.security:security-crypto:1.1.0-alpha04"
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
+    implementation "androidx.webkit:webkit:1.6.0"
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.3"
+
+    implementation "com.google.android.material:material:1.8.0"
+
+    implementation "commons-io:commons-io:2.8.0"
+    implementation "com.google.code.gson:gson:2.9.1"
+    implementation "pl.droidsonroids.yaml:snakeyaml:1.18-android"
+
+    // Test
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.5.0'
+    androidTestImplementation 'androidx.test:core:1.5.0'
+    androidTestImplementation 'androidx.test:runner:1.5.1'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    //BOTTOM OF DEPENDENCIES (DO NOT REMOVE OR MODIFY THIS LINE.)
+}

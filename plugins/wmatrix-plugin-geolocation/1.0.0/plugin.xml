@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin compile="true" id="wmatrix-plugin-geolocation" version="1.0.0" type="basic">
+    <name>Geolocation</name>
+    <description>WMatrix Geolocation Plugin</description>
+
+    <platform name="android">
+        <js-module src="www/geolocation.js" name="geolocation">
+            <clobbers target="navigator.geolocation" />
+        </js-module>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+        </config-file>
+
+        <config-file target="PluginConfig.yaml">
+            <feature name="Geolocation">
+                <param name="android-package" value="wmatrix.plugin.geolocation.Geolocation"/>
+            </feature>
+        </config-file>
+
+        <lib-file src="src/android/lib/wmatrix-plugin-geolocation-1.0.0.jar" />
+
+    </platform>
+
+</plugin>
