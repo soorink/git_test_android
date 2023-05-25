@@ -1,5 +1,46 @@
 {
-  "permissions": [],
+  "permissions": [
+    {
+      "name": "android.permission.RECORD_AUDIO",
+      "plugin": [
+        {
+          "name": "wmatrix-plugin-screenrecorder"
+        }
+      ]
+    },
+    {
+      "name": "android.permission.SYSTEM_ALERT_WINDOW",
+      "plugin": [
+        {
+          "name": "wmatrix-plugin-screenrecorder"
+        }
+      ]
+    },
+    {
+      "name": "android.permission.FOREGROUND_SERVICE",
+      "plugin": [
+        {
+          "name": "wmatrix-plugin-screenrecorder"
+        }
+      ]
+    },
+    {
+      "name": "android.permission.READ_EXTERNAL_STORAGE",
+      "plugin": [
+        {
+          "name": "wmatrix-plugin-app"
+        }
+      ]
+    },
+    {
+      "name": "android.permission.WRITE_EXTERNAL_STORAGE",
+      "plugin": [
+        {
+          "name": "wmatrix-plugin-app"
+        }
+      ]
+    }
+  ],
   "dependencies": [],
   "gradle_plugin": []
 }
